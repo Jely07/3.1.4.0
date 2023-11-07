@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User INFO</title>
+</head>
+<body>
+<form action="#" th:action="@{/user}" th:object="${user}" method="get">
+    <label for="id">Id:</label>
+    <input readonly type="number" th:field="*{id}" id="id"/>
+    <br>
+    <label for="username">Username:</label>
+    <input readonly type="text" th:field="*{username}" id="username"/>
+    <br>
+    <label for="surname">Surname:</label>
+    <input readonly type="text" th:field="*{surname}" id="surname"/>
+    <br>
+    <label for="password">Password:</label>
+    <input readonly type="text" th:field="*{password}" id="password"/>
+    <br>
+    <label for="salary">Salary:</label>
+    <input readonly type="text" th:field="*{salary}" id="salary"/>
+    <label for="roles">Roles:</label>
+    <input readonly type="text" th:field="*{roles}" id="roles"/>
+</form>
+
+<a th:href="@{/logout}">Logout</a>
+
+</body>
+</html>
