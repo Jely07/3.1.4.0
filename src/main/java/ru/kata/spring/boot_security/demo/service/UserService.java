@@ -18,7 +18,9 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    public User findByUsername(String username){ return userRepository.findByUsername(username);}
+
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username);}
     public User getById(Long id){
         return userRepository.getById(id);
     }

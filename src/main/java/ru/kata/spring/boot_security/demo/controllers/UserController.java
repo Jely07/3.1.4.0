@@ -35,12 +35,12 @@ public class UserController {
         List<Role> roles =roleRepository.findAll();
         model.addAttribute("user",user);
         model.addAttribute("roles",roles);
-        return "user-create";
+        return "redirect:/users";
     }
     @PostMapping("/users")
     public String createUser(User user){
         userService.saveUser(user);
-        return "redirect:/admin/users";
+        return "redirect:/users";
     }
     @GetMapping("/user-delete/{id}")
     public String deleteUser(@PathVariable("id") Long id){
