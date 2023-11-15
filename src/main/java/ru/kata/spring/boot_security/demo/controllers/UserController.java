@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -21,33 +22,35 @@ public class UserController {
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping("/users")
-    public String findAll(Model model,User user){
+    @GetMapping("/admin")
+    public String findAll(Model model, User user, Principal principal){
         List<User> users= userService.findAll();
         model.addAttribute("users",users);
         List<Role> roles =roleRepository.findAll();
         model.addAttribute("user",user);
         model.addAttribute("roles",roles);
-        return "user-list";
+        User user1 = userService.findByUsername(principal.getName());
+        model.addAttribute("user1",user1);
+        return "admin";
     }
     @GetMapping("/user-create")
     public String createUserForm(User user,Model model){
         List<Role> roles =roleRepository.findAll();
         model.addAttribute("user",user);
         model.addAttribute("roles",roles);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
-    @PostMapping("/users")
+    @PostMapping("/user-create")
     public String createUser(User user){
         userService.saveUser(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
     @GetMapping("/user-delete/{id}")
     public String deleteUser(@PathVariable("id") Long id){
         userService.deleteUser(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
-    @GetMapping("/user-update/{id}")
+    @GetMapping("user-update/{id}")
     @ResponseBody
     public User updateUser(@PathVariable("id")Long id,Model model){
         User user = userService.findById(id);
@@ -59,6 +62,6 @@ public class UserController {
     @PostMapping ("/user-update")
     public String updateUser(User user){
         userService.saveUser(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 }

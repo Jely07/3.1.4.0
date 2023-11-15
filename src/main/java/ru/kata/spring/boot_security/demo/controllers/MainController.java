@@ -27,8 +27,5 @@ public class MainController {
         model.addAttribute("user",user);
         return "user";
     }
-    @GetMapping("/admin")
-    public String forAdminPage(){
-        return "admin";
-    }
+
 }
