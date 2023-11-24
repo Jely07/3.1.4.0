@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -26,7 +25,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    public User(Long id, String username, String surname, String password, int salary, String email, Set<Role> roles) {
+    public User(Long id, String username, String surname, String password, int salary, String email, Collection<Role> roles) {
         this.id = id;
         this.username = username;
         this.surname = surname;
@@ -92,16 +91,29 @@ public class User {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    public Set<Role> roles;
+    public Collection<Role> roles;
 
-    public Set<Role> getRoles() {
+    public Collection<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
     public void addRole(Role role) {
         this.roles.add(role);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", surname='" + surname + '\'' +
+                ", password='" + password + '\'' +
+                ", salary=" + salary +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

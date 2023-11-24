@@ -19,6 +19,8 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email);}
     public User findByUsername(String username){
         return userRepository.findByUsername(username);}
     public User getById(Long id){
@@ -39,7 +41,7 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+        User user = findByEmail(username);
         if (user == null) {
             throw new UsernameNotFoundException("not found");
         }

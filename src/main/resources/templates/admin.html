@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      >
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,7 +21,9 @@
 <!--                                 темная панель сверху-->
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">``with roles</a>
+        <a class="navbar-brand" href="#">
+                <div id="textNav" th:utext="${user1.email} + ' with roles: ' + ${user1.roles}"></div>
+        </a>
         <ul class="nav justify-content-end">
             <a class="nav-link active" aria-current="page" th:href="@{/logout}"
             >Logout</a
@@ -95,7 +98,7 @@
                                     <td th:utext="${user.surname}">Surname</td>
                                     <td th:utext="${user.salary}">Salary</td>
                                     <td th:utext="${user.roles}">Roles</td>
-                                    <td th:utext="${user.email}">Roles</td>
+                                    <td th:utext="${user.email}">Email</td>
 
                                     <td>
                                         <button type="button" class="btn btn-primary eBtn" data-bs-toggle="modal"
@@ -106,7 +109,7 @@
                                     <td>
                                         <button type="button" data-bs-target="#exampleModal2"
                                                 data-bs-toggle="modal"
-                                                class="btn btn-danger btn-sm dBtn"
+                                                class="btn btn-danger dBtn"
                                            th:href="@{user-update/{id}(id=${user.id})}"
                                         >Delete</button>
                                     </td>
@@ -167,9 +170,10 @@
 <!--                                                            <input type="checkbox" th:field="*{roles}" id="roles"-->
 <!--                                                               th:text="${role.name}"  th:value="${role.id}" class="m-2" />-->
 <!--                                                        </th:block>-->
-                                                        <select class="form-select multiple" size="2" id="roles" >
-                                                            <option selected="selected" value="USER" id="option">USER</option>
-                                                            <option value="ADMIN">ADMIN</option>
+                                                        <select class="form-select" size="2" id="roles" name="roles">
+                                                            <th:block th:each="role: ${roles}" >
+                                                            <option  th:text="${role.name}" th:value="${role.id}"></option>
+                                                            </th:block>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -184,7 +188,7 @@
                             </form>
                         </div>
                         <div class="myForm2">
-                            <form id="formDelete" th:action="@{/user-delete/{id}(id=${user.id})}" th:object="${user}" th:method="get">
+                            <form id="formDelete" th:action="@{/user-delete/(id=${user.id})}" th:object="${user}" th:method="get">
                                 <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -229,13 +233,12 @@
                                                         <input readonly type="email" class="form-control" id="email2" name="email" value=""/>
                                                     </div>
                                                 </div>
-                                                <div class="row justify-content-md-center text-center">
+                                                <div class="row justify-content-md-center text-center" >
                                                     <div class="col-md-6">
-                                                        <label for="addRole" class="col-form-label fw-bold">Roles</label>
-                                                        <select class="form-select multiple" size="2" id="addRole" name="roles">
-                                                            <th:block th:each="role: ${roles}">
-                                                            <option selected="selected" th:field="*{roles}" id="roles2" th:text="${role.name}"  th:value="${role.id}">
-                                                            </option>
+                                                        <label for="roles2" class="col-form-label fw-bold">Roles</label>
+                                                        <select class="form-select" size="2" id="roles2" name="roles" aria-label="Disabled select example" disabled>
+                                                            <th:block th:each="role: ${roles}" >
+                                                                <option  th:text="${role.name}" th:value="${role.id}"></option>
                                                             </th:block>
                                                         </select>
                                                     </div>
@@ -243,7 +246,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <input type="submit" class="btn-danger btn-sm" value="Delete"/>
+                                                <input type="submit" class="btn-danger btn" value="Delete"/>
                                             </div>
                                         </div>
                                     </div>
@@ -339,7 +342,7 @@
                                     <th>Email</th>
                                     <th>Roles</th>
                                 </tr>
-                                <tr form action="#" th:action="@{/admin}" th:object="${user1}" th:method="get">
+                                <tr  th:action="@{/admin}" th:object="${user1}" th:method="get">
                                     <td th:utext="${user1.id}">id</td>
                                     <td th:utext="${user1.username}">First name</td>
                                     <td th:utext="${user1.surname}">Last name</td>
@@ -375,15 +378,8 @@
     // });
     const exampleModal = document.getElementById('exampleModal')
     exampleModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
         const button = event.relatedTarget
-        // Extract info from data-* attributes
         const href = button.getAttribute('href')
-        // If necessary, you could initiate an AJAX request here
-        // and then do the updating in a callback.
-        //
-        // Update the modal's content.
-        const roleUser = document.getElementById('option')
         $.get(href,function (user) {
                             $('.modal-body #id').val(user.id);
                             $('.modal-body #username').val(user.username);
@@ -391,7 +387,6 @@
                             $('.modal-body #password').val(user.password);
                             $('.modal-body #salary').val(user.salary);
                             $('.modal-body #email').val(user.email);
-
                         });
             console.log('edit')
     })
@@ -400,17 +395,14 @@
             const button = event.relatedTarget
             const href2 = button.getAttribute('href')
             $.get(href2, function (user) {
-                $('.modal-body #id2').val(user.id);
+                const idU = user.id
+                $('.modal-body #id2').val(idU);
                 $('.modal-body #username2').val(user.username);
                 $('.modal-body #surname2').val(user.surname);
                 $('.modal-body #password2').val(user.password);
                 $('.modal-body #salary2').val(user.salary);
                 $('.modal-body #email2').val(user.email);
             });
-
-                // const url = $(this).attr('data-url');
-                // $("#deleteForm").attr("action", url);
-
             console.log('delete')
     })
 </script>
